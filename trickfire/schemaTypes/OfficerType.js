@@ -6,7 +6,6 @@ import {defineType, defineField} from 'sanity'
  * @property {string} name - The name of the officer.
  * @property {image} image - Portrait of the officer.
  * @property {string} position - Position of the officer.
- * @property {string} type - Type of the officer.
  * @property {string} section - Section where the person appears on the About Us page.
  * @property {number} displayOrder - Position within the person's section.
  */
@@ -36,20 +35,6 @@ export const officerType = defineType({
       title: 'Position',
       type: 'string',
       validation: (Rule) => Rule.required().error('Position is required'),
-    }),
-    defineField({
-      name: 'type',
-      title: 'Type',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-      options: {
-        list: [
-          {title: 'Officer', value: 'officer'},
-          {title: 'Discipline Lead', value: 'discipline'},
-          {title: 'Team Lead', value: 'team'},
-          {title: 'Mission Director', value: 'mission'},
-        ],
-      },
     }),
     defineField({
       name: 'section',
