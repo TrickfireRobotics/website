@@ -10,7 +10,7 @@ import './RepeatingTextBackground.scss'
  */
 export const RepeatingTextBackground = ({backgroundText, children}) => {
     // Repeat the given background text
-    const repeatedText = Array.from({ length: 10 }, (_, i) => (
+    const repeatedText = Array.from({ length: 20 }, (_, i) => (
         <div
             key={i}
             className='repeat-text-item'

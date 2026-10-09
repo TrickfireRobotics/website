@@ -5,6 +5,7 @@ import { Event } from "../../components/Event/Event";
 import { PageSEO } from "../../components/PageSEO/PageSEO";
 import { useState, useEffect } from "react";
 import { client, urlFor } from "../../assets/SanityClient";
+import { RepeatingTextBackground } from '../../components/RepeatingTextBackground/RepeatingTextBackground';
 
 export const Events = () => {
   const seoData = {
@@ -39,31 +40,33 @@ export const Events = () => {
         </MaxWidthContainer>
         <section className="events-section">
           <MaxWidthContainer>
-            <div className="events-list">
-              {events?.length !== 0 ? (
-                events.map((event) => {
-                  return (
-                    <Event
-                      key={event?.title}
-                      img={urlFor(event.img).auto("format").url()}
-                      altText={event?.altText}
-                      title={event?.title}
-                      timeDescription={event?.timeDescription}
-                      locationDescription={event?.locationDescription}
-                      description={event?.description}
-                      date={event?.date}
-                      links={event?.links}
-                    />
-                  );
-                })
-              ) : (
-                <div className="empty-state-container">
-                  <h2 className="empty-state-text">
-                    No upcoming events right now — check back soon!
-                  </h2>
-                </div>
-              )}
-            </div>
+            <RepeatingTextBackground backgroundText="EVENTS">
+              <div className="events-list">
+                {events?.length !== 0 ? (
+                  events.map((event) => {
+                    return (
+                      <Event
+                        key={event?.title}
+                        img={urlFor(event.img).auto("format").url()}
+                        altText={event?.altText}
+                        title={event?.title}
+                        timeDescription={event?.timeDescription}
+                        locationDescription={event?.locationDescription}
+                        description={event?.description}
+                        date={event?.date}
+                        links={event?.links}
+                      />
+                    );
+                  })
+                ) : (
+                  <div className="empty-state-container">
+                    <h2 className="empty-state-text">
+                      No upcoming events right now — check back soon!
+                    </h2>
+                  </div>
+                )}
+              </div>
+            </RepeatingTextBackground>
           </MaxWidthContainer>
         </section>
       </main>
