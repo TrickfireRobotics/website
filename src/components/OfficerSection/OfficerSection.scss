@@ -1,53 +1,83 @@
 @import "../../variables.scss";
 
-@keyframes gridSlideUpFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .officer-section {
-  .title {
-    font-family: $font-heading;
-    font-size: 5rem;
-    color: $White;
-    font-weight: 600;
-    text-align: center;
-    padding: 3rem 0;
+  padding: 4rem 1.5rem 5rem;
 
-    @media screen and (max-width: 768px) {
-      font-size: 3.2rem;
+  .section-header {
+    max-width: 55rem;
+    margin: 0 auto 3.5rem;
+    text-align: center;
+
+    .title {
+      font-family: $font-heading;
+      font-size: 4.5rem;
+      line-height: 1;
+      font-weight: 600;
+      color: $White;
+      margin-bottom: 1.25rem;
     }
   }
 
-  .section-title {
-    font-family: $font-heading;
-    font-size: 3rem;
-    color: $White;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 2rem;
+  .people-group + .people-group {
+    margin-top: 4rem;
+  }
 
-    @media screen and (max-width: 768px) {
-      font-size: 2.4rem;
+  .group-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.75rem;
+
+    .group-title {
+      font-family: $font-heading;
+      font-size: 2.25rem;
+      line-height: 1;
+      font-weight: 600;
+      color: $White;
+      white-space: nowrap;
+    }
+
+    .group-rule {
+      flex: 1;
+      height: 1px;
+      background-image: linear-gradient(
+        to right,
+        $TrickFireGreen,
+        rgba($AccentPink, 0.4),
+        rgba($White, 0)
+      );
     }
   }
 
   .officer-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 3rem;
     justify-content: center;
-    padding-bottom: 3rem;
-    flex-basis: 3rem;
+    gap: 1.75rem;
+    list-style: none;
   }
 
-  .people-group:last-child .officer-grid {
-    padding-bottom: 5rem;
+  @media screen and (max-width: 768px) {
+    padding: 3rem 1.25rem 4rem;
+
+    .section-header {
+      margin-bottom: 2.5rem;
+
+      .title {
+        font-size: 2.8rem;
+      }
+    }
+
+    .group-header {
+      gap: 1rem;
+
+      .group-title {
+        font-size: 1.8rem;
+      }
+    }
+
+    .officer-grid {
+      gap: 1.25rem;
+    }
   }
 }

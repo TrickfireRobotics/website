@@ -1,95 +1,158 @@
 @import "../../variables.scss";
 
-.officer-box {
-  position: relative;
-  display: inline-block;
-  width: 20%;
-  aspect-ratio: 1;
+.officer-card {
+  display: flex;
+  min-width: 0;
   overflow: hidden;
+  background-color: darken($EerieBlack, 5%);
+  border: 1px solid rgba($White, 0.14);
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 
-  .image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center center;
+  &:hover {
+    border-color: $TrickFireGreen;
+    transform: translateY(-0.25rem);
+    box-shadow: 0 0.5rem 1.5rem rgba($Black, 0.45);
+
+    .portrait img {
+      transform: scale(1.04);
+    }
   }
 
-  .image-placeholder {
-    width: 100%;
-    height: 100%;
+  .portrait {
+    position: relative;
+    flex-shrink: 0;
+    overflow: hidden;
+    background-image: linear-gradient(
+      145deg,
+      lighten($EerieBlack, 9%),
+      $Black
+    );
+
+    // absolute so a tall portrait photo can't stretch the tile and drag the
+    // whole flex row with it
+    img {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      transition: transform 0.35s ease;
+    }
+  }
+
+  .initials {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(145deg, lighten($EerieBlack, 12%), $Black);
-
-    span {
-      font-family: $font-heading;
-      font-size: 4rem;
-      color: rgba($White, 0.45);
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-  }
-
-  &--placeholder {
-    display: inline-flex;
-    flex-direction: column;
-
-    .image-placeholder {
-      height: auto;
-      min-height: 0;
-      flex: 1;
-    }
-
-    .overlay {
-      position: static;
-      flex-shrink: 0;
-    }
-  }
-
-  .overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
-    min-height: 25%;
-    padding: 0.5rem;
-    background-color: rgba($White, 0.75);
-  }
-
-  p {
-    user-select: none;
-  }
-
-  .officer-name {
+    height: 100%;
     font-family: $font-heading;
-    font-size: 1.5rem;
-    color: $Black;
-    text-transform: uppercase;
     font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba($White, 0.38);
   }
 
-  .officer-position {
-    font-family: $font-body;
-    font-size: 1rem;
-    color: $Black;
-    text-transform: capitalize;
-    font-weight: 400;
+  .info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.4rem;
+    min-width: 0;
+  }
+
+  .name {
+    font-family: $font-heading;
+    font-weight: 600;
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: $White;
+    overflow-wrap: break-word;
+  }
+
+  .positions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    list-style: none;
+
+    li {
+      font-family: $font-body;
+      font-size: 0.95rem;
+      line-height: 1.3;
+      color: $DarkWhite;
+      overflow-wrap: break-word;
+    }
   }
 }
 
-@media screen and (max-width: 940px) {
-  .officer-box {
-    width: 50%;
-    margin-right: auto;
-    margin-left: auto;
-    display: block;
+.officer-card--feature {
+  flex: 0 1 16rem;
+  flex-direction: column;
+
+  .portrait {
+    width: 100%;
+    aspect-ratio: 1;
+  }
+
+  .initials {
+    font-size: 3.5rem;
+  }
+
+  .info {
+    justify-content: flex-start;
+    padding: 1rem 1.15rem 1.2rem;
+  }
+
+  .name {
+    font-size: 1.6rem;
+    // reserve two lines so cards stay the same height when a name wraps
+    min-height: 2 * 1.6rem * 1.05;
   }
 }
 
-@media screen and (max-width: 768px) {
-  .officer-box {
-    width: 80%;
+.officer-card--compact {
+  flex: 0 1 21rem;
+  align-items: stretch;
+
+  .portrait {
+    width: 6.25rem;
+    aspect-ratio: 1;
+  }
+
+  .initials {
+    font-size: 1.9rem;
+  }
+
+  .info {
+    padding: 0.9rem 1.1rem;
+  }
+
+  .name {
+    font-size: 1.3rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .officer-card--feature {
+    flex-basis: 100%;
+
+    .portrait {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  .officer-card--compact {
+    flex-basis: 100%;
+
+    .portrait {
+      width: 5rem;
+    }
   }
 }
