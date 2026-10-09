@@ -32,6 +32,22 @@
     }
   }
 
+  &--placeholder {
+    display: inline-flex;
+    flex-direction: column;
+
+    .image-placeholder {
+      height: auto;
+      min-height: 0;
+      flex: 1;
+    }
+
+    .overlay {
+      position: static;
+      flex-shrink: 0;
+    }
+  }
+
   .overlay {
     position: absolute;
     bottom: 0;

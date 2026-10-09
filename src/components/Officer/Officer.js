@@ -47,7 +47,10 @@ export const Officer = ({ image, name, positions }) => {
   }, [image]);
 
   return (
-    <div ref={cardRef} className="officer-box">
+    <div
+      ref={cardRef}
+      className={`officer-box${image ? "" : " officer-box--placeholder"}`}
+    >
       {image ? (
         <img className="image" src={image} alt={name} />
       ) : (
