@@ -10,7 +10,7 @@ import { urlFor } from '../../assets/SanityClient';
  * @param {Array<Object>} allOfficers - Array of officer objects from Sanity
  * @param {string} allOfficers[].name - The officer's name
  * @param {string} props.allOfficers[].position - The officer's position/title
- * @param {Object} props.allOfficers[].image - The officer's image object (Sanity image)
+ * @param {Object} [props.allOfficers[].image] - The officer's optional image object (Sanity image)
  * @returns {JSX.Element}
  * 
  * @example
@@ -43,7 +43,9 @@ export const OfficerSection = ({allOfficers}) => {
                         {section.people.map((officer) => (
                             <Officer
                                 key={officer._id}
-                                image={urlFor(officer.image).auto('format').url()}
+                                image={officer.image
+                                    ? urlFor(officer.image).auto('format').url()
+                                    : null}
                                 name={officer.name}
                                 positions={officer.positions?.length
                                     ? officer.positions

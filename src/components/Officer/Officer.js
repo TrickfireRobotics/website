@@ -12,11 +12,17 @@ gsap.registerPlugin(ScrollTrigger);
  *
  * @param {string} props.name - The name that will be displayed over the officer's photo.
  * @param {string[]} props.positions - The positions that the person holds within the club.
- * @param {string} props.photo - the photo that will be displayed in the main box.
+ * @param {string} [props.image] - The optional photo displayed in the card.
  * @returns {JSX.Element}
  */
 export const Officer = ({ image, name, positions }) => {
   const cardRef = useRef(null);
+  const initials = name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("");
 
   useEffect(() => {
     if (cardRef.current) {
@@ -42,7 +48,13 @@ export const Officer = ({ image, name, positions }) => {
 
   return (
     <div ref={cardRef} className="officer-box">
-      <img className="image" src={image} alt={name} />
+      {image ? (
+        <img className="image" src={image} alt={name} />
+      ) : (
+        <div className="image-placeholder" aria-hidden="true">
+          <span>{initials}</span>
+        </div>
+      )}
       <div className="overlay">
         <p className="officer-name">{name}</p>
         {positions.map((position) => (

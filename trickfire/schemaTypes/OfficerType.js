@@ -4,7 +4,7 @@ import {defineType, defineField, defineArrayMember} from 'sanity'
  * Sanity schema for an officer.
  * @typedef {Object} Officer
  * @property {string} name - The name of the officer.
- * @property {image} image - Portrait of the officer.
+ * @property {image} [image] - Optional portrait of the officer.
  * @property {string[]} positions - Positions held by the person.
  * @property {string} section - Section where the person appears on the About Us page.
  * @property {number} displayOrder - Position within the person's section.
@@ -28,7 +28,7 @@ export const officerType = defineType({
         hotspot: true,
         crop: true,
       },
-      validation: (Rule) => Rule.required().error('Portrait is required'),
+      description: 'Optional. A placeholder will be shown when no portrait is provided.',
     }),
     defineField({
       name: 'positions',
