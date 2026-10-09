@@ -3,13 +3,13 @@
 .officer-box {
   position: relative;
   display: inline-block;
-  aspect-ratio: 1/1;
   width: 20%;
 
   .image {
     width: 100%;
-    height: auto;
-    display: block;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
   }
 
   .overlay {
@@ -40,6 +40,15 @@
     color: $Black;
     text-transform: capitalize;
     font-weight: 400;
+  }
+}
+
+@media screen and (max-width: 940px) {
+  .officer-box {
+    width: 50%;
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
   }
 }
 

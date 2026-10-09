@@ -10,18 +10,6 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
     <title>TrickFire</title>
-
-    <script type="text/javascript">
-      // Handle redirect from 404.html
-      (function () {
-        var redirect = new URLSearchParams(window.location.search).get(
-          "redirect",
-        );
-        if (redirect) {
-          window.history.replaceState(null, null, redirect);
-        }
-      })();
-    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

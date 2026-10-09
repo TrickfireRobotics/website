@@ -35,5 +35,19 @@ export const officerType = defineType({
       type: 'string',
       validation: (Rule) => Rule.required().error('Position is required'),
     }),
+    defineField({
+      name: 'type',
+      title: 'Type',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+      options: {
+        list: [
+          {title: 'Officer', value: 'officer'},
+          {title: 'Discipline Lead', value: 'discipline'},
+          {title: 'Team Lead', value: 'team'},
+          {title: 'Mission Director', value: 'mission'},
+        ],
+      },
+    }),
   ],
 })
