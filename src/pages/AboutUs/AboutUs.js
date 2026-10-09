@@ -46,7 +46,7 @@ export const AboutUs = () => {
 
   useEffect(() => {
     client
-      .fetch(`*[_type == "officers"]`)
+      .fetch(`*[_type == "officers"] | order(coalesce(displayOrder, 999999) asc, name asc)`)
       .then((data) => setOfficers(data))
       .catch((err) => console.log(err));
   }, []);

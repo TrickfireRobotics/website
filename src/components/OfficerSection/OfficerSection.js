@@ -18,20 +18,39 @@ import { urlFor } from '../../assets/SanityClient';
  * <OfficerSection allOfficers={officers} />
  */
 export const OfficerSection = ({allOfficers}) => {
+    const sections = [
+        {
+            title: 'Officers',
+            people: allOfficers.filter((person) =>
+                person.section ? person.section === 'officers' : person.type === 'officer'
+            ),
+        },
+        {
+            title: 'Leadership',
+            people: allOfficers.filter((person) =>
+                person.section ? person.section === 'leadership' : person.type !== 'officer'
+            ),
+        },
+    ];
+
     return (
         <div className='officer-section'>
             <h1 className='title'>TrickFire is 100% Student-Led</h1>
-            { /* Grid of Officer Images */}
-            <div className='officer-grid'>
-                {allOfficers.map((officer, i) => (
-                    <Officer
-                        key={i}
-                        image={urlFor(officer.image).auto('format').url()}
-                        name={officer.name}
-                        position={officer.position}
-                    />
-                ))}
-            </div>
+            {sections.map((section) => section.people.length > 0 && (
+                <section className='people-group' key={section.title}>
+                    <h2 className='section-title'>{section.title}</h2>
+                    <div className='officer-grid'>
+                        {section.people.map((officer) => (
+                            <Officer
+                                key={officer._id}
+                                image={urlFor(officer.image).auto('format').url()}
+                                name={officer.name}
+                                position={officer.position}
+                            />
+                        ))}
+                    </div>
+                </section>
+            ))}
         </div>
     );
 };

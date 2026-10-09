@@ -1,0 +1,48 @@
+name: Deploy Sanity Studio
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'trickfire/**'
+      - '.github/workflows/deploy-sanity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sanity-studio-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: trickfire
+    env:
+      SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+      SANITY_STUDIO_APP_ID: ${{ vars.SANITY_STUDIO_APP_ID }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: trickfire/package-lock.json
+
+      - name: Check deployment configuration
+        run: |
+          test -n "$SANITY_AUTH_TOKEN" || { echo "Missing SANITY_AUTH_TOKEN repository secret"; exit 1; }
+          test -n "$SANITY_STUDIO_APP_ID" || { echo "Missing SANITY_STUDIO_APP_ID repository variable"; exit 1; }
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Deploy Studio
+        run: npm run deploy -- --yes --schema-required
