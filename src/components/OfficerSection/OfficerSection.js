@@ -45,7 +45,9 @@ export const OfficerSection = ({allOfficers}) => {
                                 key={officer._id}
                                 image={urlFor(officer.image).auto('format').url()}
                                 name={officer.name}
-                                position={officer.position}
+                                positions={officer.positions?.length
+                                    ? officer.positions
+                                    : [officer.position].filter(Boolean)}
                             />
                         ))}
                     </div>

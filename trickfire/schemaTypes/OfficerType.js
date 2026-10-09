@@ -1,11 +1,11 @@
-import {defineType, defineField} from 'sanity'
+import {defineType, defineField, defineArrayMember} from 'sanity'
 
 /**
  * Sanity schema for an officer.
  * @typedef {Object} Officer
  * @property {string} name - The name of the officer.
  * @property {image} image - Portrait of the officer.
- * @property {string} position - Position of the officer.
+ * @property {string[]} positions - Positions held by the person.
  * @property {string} section - Section where the person appears on the About Us page.
  * @property {number} displayOrder - Position within the person's section.
  */
@@ -31,10 +31,17 @@ export const officerType = defineType({
       validation: (Rule) => Rule.required().error('Portrait is required'),
     }),
     defineField({
-      name: 'position',
-      title: 'Position',
-      type: 'string',
-      validation: (Rule) => Rule.required().error('Position is required'),
+      name: 'positions',
+      title: 'Positions',
+      description: 'Add one or more positions in the order they should appear.',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'string',
+          validation: (Rule) => Rule.required().error('Position cannot be empty'),
+        }),
+      ],
+      validation: (Rule) => Rule.required().min(1).unique().error('Add at least one unique position'),
     }),
     defineField({
       name: 'section',
@@ -73,18 +80,20 @@ export const officerType = defineType({
   preview: {
     select: {
       title: 'name',
-      position: 'position',
+      positions: 'positions',
+      legacyPosition: 'position',
       section: 'section',
       displayOrder: 'displayOrder',
       media: 'image',
     },
-    prepare({title, position, section, displayOrder, media}) {
+    prepare({title, positions, legacyPosition, section, displayOrder, media}) {
       const sectionTitle = section === 'leadership' ? 'Leadership' : 'Officers'
       const order = displayOrder ? `#${displayOrder}` : 'Unordered'
+      const positionList = positions?.length ? positions.join(', ') : legacyPosition
 
       return {
         title,
-        subtitle: `${sectionTitle} · ${order} · ${position}`,
+        subtitle: `${sectionTitle} · ${order} · ${positionList || 'No position'}`,
         media,
       }
     },
