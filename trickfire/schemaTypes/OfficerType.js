@@ -6,8 +6,8 @@ import {defineType, defineField, defineArrayMember} from 'sanity'
  * @property {string} name - The name of the officer.
  * @property {image} [image] - Optional portrait of the officer.
  * @property {string[]} positions - Positions held by the person.
- * @property {string} section - Section where the person appears on the About Us page.
- * @property {number} displayOrder - Position within the person's section.
+ * @property {string} type - Category tab the person appears under on the About Us page.
+ * @property {number} displayOrder - Position within the person's category.
  */
 export const officerType = defineType({
   name: 'officers',
@@ -44,23 +44,25 @@ export const officerType = defineType({
       validation: (Rule) => Rule.required().min(1).unique().error('Add at least one unique position'),
     }),
     defineField({
-      name: 'section',
-      title: 'Section',
-      description: 'Choose which section this person appears in on the About Us page.',
+      name: 'type',
+      title: 'Category',
+      description: 'Choose which tab this person appears under on the About Us page.',
       type: 'string',
       options: {
         list: [
-          {title: 'Officers', value: 'officers'},
-          {title: 'Leadership', value: 'leadership'},
+          {title: 'Officers', value: 'officer'},
+          {title: 'Discipline Leads', value: 'discipline'},
+          {title: 'Team Leads', value: 'team'},
+          {title: 'Mission Directors', value: 'mission'},
         ],
         layout: 'radio',
       },
-      validation: (Rule) => Rule.required().error('Section is required'),
+      validation: (Rule) => Rule.required().error('Category is required'),
     }),
     defineField({
       name: 'displayOrder',
       title: 'Display order',
-      description: 'Lower numbers appear first within the selected section, such as 1 for President.',
+      description: 'Lower numbers appear first within the selected category, such as 1 for President.',
       type: 'number',
       validation: (Rule) =>
         Rule.required().integer().min(1).error('Display order must be a whole number of 1 or greater'),
@@ -68,10 +70,10 @@ export const officerType = defineType({
   ],
   orderings: [
     {
-      title: 'Section and display order',
-      name: 'sectionAndDisplayOrder',
+      title: 'Category and display order',
+      name: 'typeAndDisplayOrder',
       by: [
-        {field: 'section', direction: 'asc'},
+        {field: 'type', direction: 'asc'},
         {field: 'displayOrder', direction: 'asc'},
         {field: 'name', direction: 'asc'},
       ],
@@ -82,18 +84,24 @@ export const officerType = defineType({
       title: 'name',
       positions: 'positions',
       legacyPosition: 'position',
-      section: 'section',
+      type: 'type',
       displayOrder: 'displayOrder',
       media: 'image',
     },
-    prepare({title, positions, legacyPosition, section, displayOrder, media}) {
-      const sectionTitle = section === 'leadership' ? 'Leadership' : 'Officers'
+    prepare({title, positions, legacyPosition, type, displayOrder, media}) {
+      const typeTitles = {
+        officer: 'Officers',
+        discipline: 'Discipline Leads',
+        team: 'Team Leads',
+        mission: 'Mission Directors',
+      }
+      const typeTitle = typeTitles[type] || 'Uncategorized'
       const order = displayOrder ? `#${displayOrder}` : 'Unordered'
       const positionList = positions?.length ? positions.join(', ') : legacyPosition
 
       return {
         title,
-        subtitle: `${sectionTitle} · ${order} · ${positionList || 'No position'}`,
+        subtitle: `${typeTitle} · ${order} · ${positionList || 'No position'}`,
         media,
       }
     },

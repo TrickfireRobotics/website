@@ -1,5 +1,5 @@
 import "./OfficerSection.scss";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Officer } from "../Officer/Officer";
@@ -8,18 +8,27 @@ import { urlFor } from "../../assets/SanityClient";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const TABS = [
+  { key: "officer", label: "OFFICERS" },
+  { key: "discipline", label: "DISCIPLINE LEADS" },
+  { key: "team", label: "TEAM LEADS" },
+  { key: "mission", label: "MISSION DIRECTORS" },
+];
+
 /**
  * @component
  *
- * Renders the complete officer section, split into an Officers group of feature cards
- * and a Leadership group of compact cards.
+ * Renders the complete officer section with tabbed navigation and officer grid.
+ *
+ * This component displays officers organized by category (Officers, Discipline Leads,
+ * Team Leads, Mission Directors). It includes desktop tab navigation and a mobile
+ * dropdown selector.
  *
  * @param {Array<Object>} allOfficers - Array of officer objects from Sanity
  * @param {string} allOfficers[].name - The officer's name
- * @param {string[]} [props.allOfficers[].positions] - The officer's positions
- * @param {string} [props.allOfficers[].position] - Legacy single position
- * @param {string} [props.allOfficers[].section] - 'officers' or 'leadership'
- * @param {Object} [props.allOfficers[].image] - The officer's optional image object (Sanity image)
+ * @param {string[]} allOfficers[].positions - The officer's positions
+ * @param {Object} [allOfficers[].image] - The officer's optional image object (Sanity image)
+ * @param {('officer'|'discipline'|'team'|'mission')} allOfficers[].type - Category tab for filtering
  * @returns {JSX.Element}
  *
  * @example
@@ -27,28 +36,13 @@ gsap.registerPlugin(ScrollTrigger);
  * <OfficerSection allOfficers={officers} />
  */
 export const OfficerSection = ({ allOfficers }) => {
+  const [activeTab, setActiveTab] = useState(TABS[0].key);
+  const [isDropdownActive, setIsDropdownActive] = useState(false);
   const rootRef = useRef(null);
 
-  const sections = [
-    {
-      title: "Officers",
-      variant: "feature",
-      people: allOfficers.filter((person) =>
-        person.section
-          ? person.section === "officers"
-          : person.type === "officer",
-      ),
-    },
-    {
-      title: "Leadership",
-      variant: "compact",
-      people: allOfficers.filter((person) =>
-        person.section
-          ? person.section === "leadership"
-          : person.type !== "officer",
-      ),
-    },
-  ];
+  const displayedOfficers = allOfficers.filter(
+    (officer) => officer.type === activeTab,
+  );
 
   useEffect(() => {
     if (
@@ -79,7 +73,7 @@ export const OfficerSection = ({ allOfficers }) => {
     }, rootRef);
 
     return () => context.revert();
-  }, [allOfficers]);
+  }, [activeTab, allOfficers]);
 
   return (
     <div className="officer-section" ref={rootRef}>
@@ -88,36 +82,59 @@ export const OfficerSection = ({ allOfficers }) => {
         <GradientLine />
       </header>
 
-      {sections.map(
-        (section) =>
-          section.people.length > 0 && (
-            <section className="people-group" key={section.title}>
-              <header className="group-header">
-                <h2 className="group-title">{section.title}</h2>
-                <span className="group-rule" aria-hidden="true" />
-              </header>
-              <ul className={`officer-grid officer-grid--${section.variant}`}>
-                {section.people.map((officer) => (
-                  <Officer
-                    key={officer._id}
-                    variant={section.variant}
-                    image={
-                      officer.image
-                        ? urlFor(officer.image).auto("format").width(640).url()
-                        : null
-                    }
-                    name={officer.name}
-                    positions={
-                      officer.positions?.length
-                        ? officer.positions
-                        : [officer.position].filter(Boolean)
-                    }
-                  />
-                ))}
-              </ul>
-            </section>
-          ),
-      )}
+      <div className="tabs">
+        {TABS.map((tab) => (
+          <button
+            key={tab.key}
+            className={`tab ${activeTab === tab.key ? "active" : ""}`}
+            onClick={() => setActiveTab(tab.key)}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="mobile-tabs">
+        <button
+          className="active-tab"
+          onClick={() => setIsDropdownActive(!isDropdownActive)}
+        >
+          {TABS.find((tab) => tab.key === activeTab)?.label}
+          <span className="arrow">{isDropdownActive ? "▲" : "▼"}</span>
+        </button>
+        <GradientLine className="gradient" />
+        {isDropdownActive && (
+          <div className="dropdown">
+            {TABS.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => {
+                  setActiveTab(tab.key);
+                  setIsDropdownActive(false);
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <ul className="officer-grid officer-grid--feature" key={activeTab}>
+        {displayedOfficers.map((officer) => (
+          <Officer
+            key={officer._id}
+            variant="feature"
+            image={
+              officer.image
+                ? urlFor(officer.image).auto("format").width(640).url()
+                : null
+            }
+            name={officer.name}
+            positions={officer.positions}
+          />
+        ))}
+      </ul>
     </div>
   );
 };

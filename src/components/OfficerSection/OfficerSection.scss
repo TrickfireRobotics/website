@@ -18,34 +18,95 @@
     }
   }
 
-  .people-group + .people-group {
-    margin-top: 4rem;
-  }
-
-  .group-header {
+  .tabs {
     display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    margin-bottom: 1.75rem;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 2.5rem;
 
-    .group-title {
+    .tab {
       font-family: $font-heading;
-      font-size: 2.25rem;
-      line-height: 1;
       font-weight: 600;
+      font-size: 1.5rem;
       color: $White;
-      white-space: nowrap;
+      cursor: pointer;
+      position: relative;
+      background: none;
+      border: none;
+      outline: none;
+      padding-bottom: 0.5rem;
+
+      &.active::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 3px;
+        width: 100%;
+        background-image: linear-gradient(
+          to right,
+          $TrickFireGreen,
+          $AccentPink
+        );
+      }
     }
 
-    .group-rule {
-      flex: 1;
-      height: 1px;
-      background-image: linear-gradient(
-        to right,
-        $TrickFireGreen,
-        rgba($AccentPink, 0.4),
-        rgba($White, 0)
-      );
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .mobile-tabs {
+    display: none;
+    position: relative;
+    margin-bottom: 2rem;
+
+    .active-tab {
+      font-family: $font-heading;
+      font-weight: 600;
+      width: 100%;
+      text-align: left;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: $White;
+      padding-bottom: 0.5rem;
+      cursor: pointer;
+
+      .arrow {
+        margin-left: 1rem;
+      }
+    }
+
+    .dropdown {
+      display: flex;
+      flex-direction: column;
+      background: $EerieBlack;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 1;
+
+      button {
+        padding: 0.5rem 0;
+        color: $White;
+        font-size: 1.3rem;
+        font-family: $font-heading;
+        font-weight: 600;
+        background: none;
+        border: none;
+        text-align: left;
+        cursor: pointer;
+
+        &:hover {
+          background: rgba($White, 0.1);
+        }
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      display: block;
     }
   }
 
@@ -68,12 +129,12 @@
       }
     }
 
-    .group-header {
-      gap: 1rem;
+    .tabs {
+      margin-bottom: 1.5rem;
+    }
 
-      .group-title {
-        font-size: 1.8rem;
-      }
+    .mobile-tabs {
+      margin-bottom: 1.5rem;
     }
 
     .officer-grid {
