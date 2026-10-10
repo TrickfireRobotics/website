@@ -1,12 +1,8 @@
 import "./OfficerSection.scss";
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useState } from "react";
 import { Officer } from "../Officer/Officer";
 import { GradientLine } from "../GradientLine/GradientLine";
 import { urlFor } from "../../assets/SanityClient";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const TABS = [
   { key: "officer", label: "OFFICERS" },
@@ -27,7 +23,7 @@ const TABS = [
  * @param {Array<Object>} allOfficers - Array of officer objects from Sanity
  * @param {string} allOfficers[].name - The officer's name
  * @param {string[]} allOfficers[].positions - The officer's positions
- * @param {Object} [allOfficers[].image] - The officer's optional image object (Sanity image)
+ * @param {Object} [allOfficers[].image] - The officer's optional photo (Sanity image)
  * @param {('officer'|'discipline'|'team'|'mission')} allOfficers[].type - Category tab for filtering
  * @returns {JSX.Element}
  *
@@ -38,49 +34,14 @@ const TABS = [
 export const OfficerSection = ({ allOfficers }) => {
   const [activeTab, setActiveTab] = useState(TABS[0].key);
   const [isDropdownActive, setIsDropdownActive] = useState(false);
-  const rootRef = useRef(null);
 
   const displayedOfficers = allOfficers.filter(
     (officer) => officer.type === activeTab,
   );
 
-  useEffect(() => {
-    if (
-      !rootRef.current ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return;
-    }
-
-    const context = gsap.context((self) => {
-      self.selector(".officer-grid").forEach((grid) => {
-        gsap.fromTo(
-          grid.children,
-          { opacity: 0, y: 24 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            stagger: 0.06,
-            scrollTrigger: {
-              trigger: grid,
-              start: "top 85%",
-              once: true,
-            },
-          },
-        );
-      });
-    }, rootRef);
-
-    return () => context.revert();
-  }, [activeTab, allOfficers]);
-
   return (
-    <div className="officer-section" ref={rootRef}>
-      <header className="section-header">
-        <h1 className="title">TrickFire is 100% Student-Led</h1>
-        <GradientLine />
-      </header>
+    <div className="officer-section">
+      <h1 className="title">TrickFire is 100% Student-Led</h1>
 
       <div className="tabs">
         {TABS.map((tab) => (
@@ -120,11 +81,10 @@ export const OfficerSection = ({ allOfficers }) => {
         )}
       </div>
 
-      <ul className="officer-grid officer-grid--feature" key={activeTab}>
+      <div className="officer-grid" key={activeTab}>
         {displayedOfficers.map((officer) => (
           <Officer
             key={officer._id}
-            variant="feature"
             image={
               officer.image
                 ? urlFor(officer.image).auto("format").width(640).url()
@@ -134,7 +94,7 @@ export const OfficerSection = ({ allOfficers }) => {
             positions={officer.positions}
           />
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
