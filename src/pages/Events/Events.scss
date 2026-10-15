@@ -21,7 +21,7 @@
     }
 
     .events-section {
-        border-top: solid white 1px;
+        outline: 1px solid hsla(0, 0%, 100%, 40%);
 
         .events-list {
             width: 100%;
@@ -39,7 +39,7 @@
         justify-content: center;
         align-items: center;
         padding: 4rem;
-        border: white 1px solid;
+        outline: 1px solid hsla(0, 0%, 100%, 40%);
 
         .empty-state-text {
             color: $White;
