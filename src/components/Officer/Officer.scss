@@ -18,7 +18,9 @@
   width: 20%;
   overflow: hidden;
   animation: slideUpFadeIn 0.6s ease-out;
-  background-image: linear-gradient(145deg, lighten($EerieBlack, 9%), $Black);
+  /*background-image: linear-gradient(145deg, lighten($EerieBlack, 9%), $Black);*/
+  background: $Black;
+  z-index: 0;
 
   .image {
     width: 100%;
@@ -38,7 +40,8 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba($White, 0.38);
+    /*color: rgba($White, 0.38);*/
+    color: $DarkWhite;
   }
 
   .overlay {
