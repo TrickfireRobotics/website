@@ -29,11 +29,9 @@ export const Officer = ({ image, name, positions }) => {
       )}
       <div className="overlay">
         <p className="officer-name">{name}</p>
-        {positions.map((position) => (
-          <p className="officer-position" key={position}>
-            {position.trim()}
-          </p>
-        ))}
+        <p className="officer-position">
+          {positions.map((position) => position.trim()).join(" • ")}
+        </p>
       </div>
     </div>
   );
