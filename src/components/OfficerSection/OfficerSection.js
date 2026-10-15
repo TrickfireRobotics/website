@@ -8,7 +8,6 @@ const TABS = [
   { key: "officer", label: "OFFICERS" },
   { key: "discipline", label: "DISCIPLINE LEADS" },
   { key: "team", label: "TEAM LEADS" },
-  { key: "mission", label: "MISSION DIRECTORS" },
 ];
 
 /**
@@ -17,14 +16,14 @@ const TABS = [
  * Renders the complete officer section with tabbed navigation and officer grid.
  *
  * This component displays officers organized by category (Officers, Discipline Leads,
- * Team Leads, Mission Directors). It includes desktop tab navigation and a mobile
+ * Team Leads). It includes desktop tab navigation and a mobile
  * dropdown selector.
  *
  * @param {Array<Object>} allOfficers - Array of officer objects from Sanity
  * @param {string} allOfficers[].name - The officer's name
  * @param {string[]} allOfficers[].positions - The officer's positions
  * @param {Object} [allOfficers[].image] - The officer's optional photo (Sanity image)
- * @param {('officer'|'discipline'|'team'|'mission')} allOfficers[].type - Category tab for filtering
+ * @param {('officer'|'discipline'|'team')[]} allOfficers[].categories - Category tabs this person appears under
  * @returns {JSX.Element}
  *
  * @example
@@ -35,9 +34,10 @@ export const OfficerSection = ({ allOfficers }) => {
   const [activeTab, setActiveTab] = useState(TABS[0].key);
   const [isDropdownActive, setIsDropdownActive] = useState(false);
 
-  const displayedOfficers = allOfficers.filter(
-    (officer) => officer.type === activeTab,
-  );
+  const displayedOfficers = allOfficers.filter((officer) => {
+    const categories = officer.categories ?? (officer.type ? [officer.type] : []);
+    return categories.includes(activeTab);
+  });
 
   return (
     <div className="officer-section">

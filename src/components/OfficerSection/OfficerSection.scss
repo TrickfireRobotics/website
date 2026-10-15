@@ -70,6 +70,9 @@
       font-family: $font-heading;
       font-weight: 600;
       width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       text-align: left;
       font-size: 2rem;
       background: none;
@@ -79,7 +82,7 @@
 
       .arrow {
         margin-left: 1rem;
-        float: right;
+        font-size: 1rem;
       }
     }
 
